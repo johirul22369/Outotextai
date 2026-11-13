@@ -311,7 +311,7 @@
         }
 
         function buildSignalText() {
-            let titleEmoji = selectedSize === 'SMALL' ? "🔥 𝗦𝗠𝗔𝗟𝗟 𝗦𝗜𝗚𝗡𝗔𝗟 🔥" : "🔥 𝗕𝗜𝗚 𝗦𝗜𝗚𝗡𝗔𝗟 🔥";
+            let headerTitle = "🔥 𝐇𝐆𝐙𝐘 𝐨𝐫 𝐁𝐃𝐓 𝐩𝐥𝐚𝐭𝐟𝐨𝐫𝐦 🔥";
             let sizePart = selectedSize === 'SMALL' ? "𝐁𝐄𝐓 𝐒𝐌𝐀𝐋𝐋" : "𝐁𝐄𝐓 𝐁𝐈𝐆";
             
             // কালার ও নাম্বার স্বাধীনভাবে যুক্ত করা
@@ -328,7 +328,7 @@
                 finalAction += ` + ${extraParts.join(' ')}`;
             }
 
-            currentSignalText = `${titleEmoji}\n` +
+            currentSignalText = `${headerTitle}\n` +
                                 `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
                                 `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${currentPeriodNum}\n` +
                                 `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
