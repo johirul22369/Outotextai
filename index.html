@@ -214,7 +214,7 @@
     <div class="panel-box">
         <div class="panel-header">
             <h2>👑 𝗢𝗪𝗡𝗘𝗥 𝗢𝗙 𝗝𝗢𝗬【𝟐𝐱™️】</h2>
-            <p>Manual Independent Signal Panel (30S)</p>
+            <p>Manual Signal Panel (30S)</p>
         </div>
 
         <div class="status-bar">
@@ -256,7 +256,7 @@
             📋 COPY SIGNAL FOR CHANNEL
         </button>
 
-        <div class="toast" id="toastMsg">✅ লিংকসহ কপি হয়েছে! চ্যানেলে পেস্ট করুন।</div>
+        <div class="toast" id="toastMsg">✅ সফলভাবে কপি হয়েছে!</div>
     </div>
 
     <script>
@@ -264,8 +264,7 @@
         let selectedColor = 'NONE';
         let selectedNum = 'NONE';
         let currentPeriodNum = '';
-        let htmlClipboardContent = '';
-        let plainClipboardContent = '';
+        let fullSignalText = '';
 
         function selectSize(size) {
             selectedSize = size;
@@ -291,7 +290,7 @@
 
         function buildSignalText() {
             let topTitle = selectedSize === 'SMALL' ? "🔥 𝗦𝗠𝗔𝗟𝗟 𝗦𝗜𝗚𝗡𝗔𝗟 🔥" : "🔥 𝗕𝗜𝗚 𝗦𝗜𝗚𝗡𝗔𝗟 🔥";
-            let actionText = selectedSize === 'SMALL' ? "𝐁𝐄𝐓 𝐒𝐌𝗔𝐋𝐋" : "𝐁𝐄𝐓 𝐁𝐈𝐆";
+            let actionText = selectedSize === 'SMALL' ? "𝐁𝐄𝐓 𝐒𝐌𝐀𝐋𝐋" : "𝐁𝐄𝐓 𝐁𝐈𝐆";
             
             let extraParts = [];
             if (selectedColor === 'GREEN') {
@@ -305,28 +304,17 @@
                 finalAction += ` ${extraParts.join(' ')}`;
             }
 
-            // স্ক্রিনের প্রিভিউ টেক্সট
-            let previewText = `${topTitle}\n` +
-                              `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
-                              `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${currentPeriodNum}\n` +
-                              `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
-                              `⚡ 𝐖𝐈𝐍𝐆𝐎   ➤   𝟯𝟬𝗦 ⏱️\n` +
-                              `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
-                              `🔗 𝗗𝗜𝗥𝗘𝗖𝗧 𝗪𝗘𝗕 𝗘𝗡𝗧𝗥𝗬`;
+            fullSignalText = `${topTitle}\n` +
+                             `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                             `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${currentPeriodNum}\n` +
+                             `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
+                             `⚡ 𝐖𝐈𝐍𝐆𝐎   ➤   𝟯𝟬𝗦 ⏱️\n` +
+                             `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                             `🔗 𝗗𝗜𝗥𝗘𝗖𝗧 𝗪𝗘𝗕 𝗘𝗡𝗧𝗥𝗬\n` +
+                             `https://hgnice.bet/#/register?invitationCode=68758106622`;
 
-            document.getElementById('signalBox').innerText = previewText;
-
-            // প্লেন ক্লিপবোর্ড কন্টেন্ট
-            plainClipboardContent = previewText;
-            
-            // টেলিগ্রামের জন্য হাইপারলিংক ফরম্যাট (লিংক হাইড করা থাকবে)
-            htmlClipboardContent = `${topTitle}\n` +
-                                   `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
-                                   `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${currentPeriodNum}\n` +
-                                   `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
-                                   `⚡ 𝐖𝐈𝐍𝐆𝐎   ➤   𝟯𝟬𝗦 ⏱️\n` +
-                                   `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
-                                   `<a href="https://hgnice.bet/#/register?invitationCode=68758106622">🔗 𝗗𝗜𝗥𝗘𝗖𝗧 𝗪𝗘𝗕 𝗘𝗡𝗧𝗥𝗬</a>`;
+            document.getElementById('signalBoxinnerText') = fullSignalText;
+            document.getElementById('signalBox').innerText = fullSignalText;
         }
 
         function updateTimerAndPeriod() {
@@ -338,9 +326,8 @@
             const totalDaySeconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
             const totalPeriods30s = Math.floor(totalDaySeconds / 30);
             
-            // হুবহু উইনগো গেমের পিরিয়ড ফরম্যাট (যেমন: 50728 বা পূর্ণাঙ্গ সিকোয়েন্স)
             const sequenceNumber = totalPeriods30s + 1;
-            const shortPeriod = String(sequenceNumber).slice(-5); // শেষ ৫-৬ ডিজিট
+            const shortPeriod = String(sequenceNumber).slice(-5);
             
             const newPeriod = `${year}${month}${day}${sequenceNumber}`;
             const remainingSecs = 30 - (totalDaySeconds % 30);
@@ -355,33 +342,15 @@
         }
 
         function copySignalText() {
-            if (navigator.clipboard && window.ClipboardItem) {
-                const textBlob = new Blob([plainClipboardContent], { type: 'text/plain' });
-                const htmlBlob = new Blob([htmlClipboardContent], { type: 'text/html' });
-                const clipboardItem = new ClipboardItem({ 'text/plain': textBlob, 'text/html': htmlBlob });
-                
-                navigator.clipboard.write([clipboardItem]).then(() => {
-                    showToast();
-                }).catch(() => {
-                    fallbackCopy();
-                });
-            } else {
-                fallbackCopy();
-            }
-        }
-
-        function fallbackCopy() {
-            navigator.clipboard.writeText(plainClipboardContent).then(() => {
-                showToast();
+            navigator.clipboard.writeText(fullSignalText).then(() => {
+                const toast = document.getElementById('toastMsg');
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 1800);
+            }).catch(err => {
+                alert("ਕপি করতে সমস্যা হয়েছে!");
             });
-        }
-
-        function showToast() {
-            const toast = document.getElementById('toastMsg');
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 1800);
         }
 
         setInterval(updateTimerAndPeriod, 1000);
