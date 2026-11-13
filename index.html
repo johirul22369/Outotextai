@@ -233,8 +233,8 @@
         <!-- ১. মেইন সিগন্যাল (BIG / SMALL) -->
         <div class="section-label">🎯 সিগন্যাল সিলেক্ট করুন (BIG / SMALL):</div>
         <div class="main-btn-grid">
-            <button class="action-btn btn-small active" id="btnSmall" onclick="selectSize('SMALL')">SMALL 🟢</button>
-            <button class="action-btn btn-big" id="btnBig" onclick="selectSize('BIG')">BIG 🔴</button>
+            <button class="action-btn btn-small active" id="btnSmall" onclick="selectSize('SMALL')">SMALL 🟢 GREEN</button>
+            <button class="action-btn btn-big" id="btnBig" onclick="selectSize('BIG')">BIG 🔴 RED</button>
         </div>
 
         <!-- ২. অপশনাল কালার -->
@@ -313,9 +313,10 @@
 
         function buildSignalText() {
             let titleEmoji = selectedSize === 'SMALL' ? "🔥 𝗦𝗠𝗔𝗟𝗟 𝗦𝗜𝗚𝗡𝗔𝗟 🔥" : "🔥 𝗕𝗜𝗚 𝗦𝗜𝗚𝗡𝗔𝗟 🔥";
-            let sizePart = selectedSize === 'SMALL' ? "𝐁𝐄𝐓 𝐒𝐌𝐀𝐋𝐋 🟢" : "𝐁𝐄𝐓 𝐁𝐈𝐆 🔴";
             
-            // অপশনাল কালার ও নাম্বার যোগ করা
+            // কালার নামসহ টেক্সট ফিক্সড করা
+            let sizePart = selectedSize === 'SMALL' ? "𝐁𝐄𝐓 𝐒𝐌𝐀𝐋𝐋 🟢 GREEN" : "𝐁𝐄𝐓 𝐁𝐈𝐆 🔴 RED";
+            
             let extraParts = [];
             if (selectedColor !== 'NONE') {
                 extraParts.push(toBoldUnicode(selectedColor));
@@ -334,8 +335,7 @@
                                 `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${currentPeriodNum}\n` +
                                 `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
                                 `⚡ 𝐖𝐈𝐍𝐆𝐎   ➤   𝟯𝟬𝗦 ⏱️\n` +
-                                `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
-                                `🔗 𝗗𝗜𝗥𝗘𝗖𝗧 𝗪𝗘𝗕 𝗘𝗡𝗧𝗥𝗬`;
+                                `▱▱▱▱▱▱▱▱▱▱▱▱▱▱`;
 
             document.getElementById('signalBox').innerText = currentSignalText;
         }
