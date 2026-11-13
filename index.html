@@ -167,14 +167,13 @@
             border-radius: 14px;
             padding: 14px 12px;
             font-family: monospace;
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             color: #00ffcc;
             white-space: pre-wrap;
             text-align: left;
             line-height: 1.5;
             box-shadow: inset 0 0 12px rgba(0, 255, 204, 0.15);
             margin-bottom: 14px;
-            word-break: break-all;
         }
 
         .btn-copy {
@@ -257,7 +256,7 @@
             📋 COPY SIGNAL FOR CHANNEL
         </button>
 
-        <div class="toast" id="toastMsg">✅ কপি হয়েছে! এখন চ্যানেলে পেস্ট করুন।</div>
+        <div class="toast" id="toastMsg">✅ লিংকসহ কপি হয়েছে! চ্যানেলে পেস্ট করুন।</div>
     </div>
 
     <script>
@@ -265,7 +264,8 @@
         let selectedColor = 'NONE';
         let selectedNum = 'NONE';
         let currentPeriodNum = '';
-        let currentSignalText = '';
+        let htmlClipboardContent = '';
+        let plainClipboardContent = '';
 
         function selectSize(size) {
             selectedSize = size;
@@ -309,16 +309,28 @@
                 finalAction += ` + ${extraParts.join(' ')}`;
             }
 
-            currentSignalText = `${headerTitle}\n` +
-                                `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
-                                `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${currentPeriodNum}\n` +
-                                `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
-                                `⚡ 𝐖𝐈𝐍𝐆𝐎   ➤   𝟯𝟬𝗦 ⏱️\n` +
-                                `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
-                                `🔗 𝗗𝗜𝗥𝗘𝗖𝗧 𝗪𝗘𝗕 𝗘𝗡𝗧𝗥𝗬\n` +
-                                `https://hgnice.bet/#/register?invitationCode=68758106622`;
+            // স্ক্রিনে শুধু প্লেন টেক্সট দেখানোর জন্য
+            let previewText = `${headerTitle}\n` +
+                              `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                              `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${currentPeriodNum}\n` +
+                              `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
+                              `⚡ 𝐖𝐈𝐍𝐆𝐎   ➤   𝟯𝟬𝗦 ⏱️\n` +
+                              `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                              `🔗 𝗗𝗜𝗥𝗘𝗖𝗧 𝗪𝗘𝗕 𝗘𝗡𝗧𝗥𝗬`;
 
-            document.getElementById('signalBox').innerText = currentSignalText;
+            document.getElementById('signalBox').innerText = previewText;
+
+            // টেলিগ্রাম চ্যানেলে পেস্ট করার সময় লিঙ্ক হাইড রেখে হাইপারলিংক পাঠানোর জন্য
+            plainClipboardContent = previewText;
+            
+            // HTML ফরম্যাট যা টেলিগ্রাম রিচ টেক্সট হিসেবে লুকাতে সাহায্য করবে
+            htmlClipboardContent = `${headerTitle}\n` +
+                                   `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                                   `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${currentPeriodNum}\n` +
+                                   `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
+                                   `⚡ 𝐖𝐈𝐍𝐆𝐎   ➤   𝟯𝟬𝗦 ⏱️\n` +
+                                   `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                                   `<a href="https://hgnice.bet/#/register?invitationCode=68758106622">🔗 𝗗𝗜𝗥𝗘𝗖𝗧 𝗪𝗘𝗕 𝗘𝗡𝗧𝗥𝗬</a>`;
         }
 
         function updateTimerAndPeriod() {
@@ -344,13 +356,34 @@
         }
 
         function copySignalText() {
-            navigator.clipboard.writeText(currentSignalText).then(() => {
-                const toast = document.getElementById('toastMsg');
-                toast.style.display = 'block';
-                setTimeout(() => {
-                    toast.style.display = 'none';
-                }, 1800);
+            // ক্লিপবোর্ডে হাইপারলিংকসহ কপি করার আধুনিক পদ্ধতি
+            if (navigator.clipboard && window.ClipboardItem) {
+                const textBlob = new Blob([plainClipboardContent], { type: 'text/plain' });
+                const htmlBlob = new Blob([htmlClipboardContent], { type: 'text/html' });
+                const clipboardItem = new ClipboardItem({ 'text/plain': textBlob, 'text/html': htmlBlob });
+                
+                navigator.clipboard.write([clipboardItem]).then(() => {
+                    showToast();
+                }).catch(() => {
+                    fallbackCopy();
+                });
+            } else {
+                fallbackCopy();
+            }
+        }
+
+        function fallbackCopy() {
+            navigator.clipboard.writeText(plainClipboardContent).then(() => {
+                showToast();
             });
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toastMsg');
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 1800);
         }
 
         setInterval(updateTimerAndPeriod, 1000);
