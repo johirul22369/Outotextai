@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>👑 OWNER OF JOY - Live Signal Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Hind+Siliguri:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Hind Siliguri', sans-serif;
+            user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            min-height: 100vh;
+            background: #05070c;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .panel-box {
+            width: 100%;
+            max-width: 400px;
+            background: radial-gradient(circle at top, #241b00, #080602);
+            border: 2px solid #ffd700;
+            border-radius: 20px;
+            padding: 22px 18px;
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.35);
+            text-align: center;
+        }
+
+        .panel-header h2 {
+            color: #ffd700;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+            margin-bottom: 4px;
+        }
+
+        .panel-header p {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            margin-bottom: 15px;
+        }
+
+        .timer-badge {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            color: #ffd700;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 800;
+            padding: 6px 12px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 14px;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+
+        .signal-output-box {
+            background: #000;
+            border: 1.5px dashed #ffd700;
+            border-radius: 14px;
+            padding: 16px 12px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #00ffcc;
+            white-space: pre-wrap;
+            text-align: left;
+            line-height: 1.5;
+            box-shadow: inset 0 0 12px rgba(0, 255, 204, 0.15);
+            margin-bottom: 15px;
+        }
+
+        .btn-copy {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #b8860b, #ffd700, #b8860b);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.6);
+            transition: 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-copy:active {
+            transform: scale(0.97);
+        }
+
+        .toast {
+            margin-top: 10px;
+            color: #00ff66;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: none;
+            text-shadow: 0 0 8px rgba(0, 255, 102, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="panel-box">
+        <div class="panel-header">
+            <h2>👑 𝗢𝗪𝗡𝗘𝗥 𝗢𝗙 𝗝𝗢𝗬【𝟐𝐱™️】</h2>
+            <p>Live Wingo 30S Exact Period Sync Panel</p>
+        </div>
+
+        <div class="timer-badge" id="timerDisplay">
+            ⏳ NEXT SIGNAL IN: 30s
+        </div>
+
+        <div class="signal-output-box" id="signalBox">
+            সিগন্যাল লোড হচ্ছে...
+        </div>
+
+        <button class="btn-copy" onclick="copySignalText()">
+            📋 COPY SIGNAL FOR CHANNEL
+        </button>
+
+        <div class="toast" id="toastMsg">✅ সফলভাবে কপি হয়েছে! চ্যানেলে পেস্ট করুন।</div>
+    </div>
+
+    <script>
+        let currentSignalText = "";
+        let lastPeriod = "";
+
+        function updateLiveSignal() {
+            const now = new Date();
+            
+            // উইনগো গেমের অফিশিয়াল নিখুঁত পিরিয়ড ফরম্যাট (UTC টাইম অনুযায়ী হিসাব করা)
+            const year = now.getUTCFullYear();
+            const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(now.getUTCDate()).padStart(2, '0');
+            
+            const utcHours = now.getUTCHours();
+            const utcMinutes = now.getUTCMinutes();
+            const utcSeconds = now.getUTCSeconds();
+            
+            const totalDaySeconds = utcHours * 3600 + utcMinutes * 60 + utcSeconds;
+            const totalPeriods30s = Math.floor(totalDaySeconds / 30);
+            
+            // গেমের রিয়েল সিকোয়েন্স নাম্বার জেনারেটর
+            const sequenceNumber = 100000 + totalPeriods30s + 1;
+            const exactPeriodNum = `${year}${month}${day}${sequenceNumber}`;
+
+            let remainingSecs = 30 - (totalDaySeconds % 30);
+            document.getElementById('timerDisplay').innerText = `⏳ NEXT SIGNAL IN: ${remainingSecs}s`;
+
+            if (exactPeriodNum !== lastPeriod) {
+                lastPeriod = exactPeriodNum;
+                
+                let randVal = Math.floor(Math.random() * 10);
+                let isSmall = randVal < 5;
+                
+                let actionText = isSmall ? "𝐁𝐄𝐓 𝐒𝐌𝐀𝐋𝐋 🟢" : "𝐁𝐄𝐓 𝐁𝐈𝐆 🔴";
+                let titleEmoji = isSmall ? "🔥 𝗦𝗠𝗔𝗟𝗟 𝗦𝗜𝗚𝗡𝗔𝗟 🔥" : "🔥 𝗕𝗜𝗚 𝗦𝗜𝗚𝗡𝗔𝗟 🔥";
+
+                currentSignalText = `${titleEmoji}\n` +
+                                    `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                                    `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${exactPeriodNum}\n` +
+                                    `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${actionText}\n` +
+                                    `⚡ 𝐖𝐈𝐍𝐆𝐎   ➤   𝟯𝟬𝗦 ⏱️\n` +
+                                    `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                                    `🔗 𝗗𝗜𝗥𝗘𝗖𝗧 𝗪𝗘𝗕 𝗘𝗡𝗧𝗥𝗬\n` +
+                                    `https://hgnice.bet/#/register?invitationCode=376851951983`;
+
+                document.getElementById('signalBox').innerText = currentSignalText;
+            }
+        }
+
+        function copySignalText() {
+            navigator.clipboard.writeText(currentSignalText).then(() => {
+                let toast = document.getElementById('toastMsg');
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 2000);
+            });
+        }
+
+        setInterval(updateLiveSignal, 1000);
+        window.onload = updateLiveSignal;
+    </script>
+</body>
+</html>
