@@ -290,27 +290,23 @@
         }
 
         function buildSignalText() {
-            let headerTitle = "🔥 𝐇𝐆𝐙𝐘 𝐨𝐫 𝐁𝐃𝐓 𝐩𝐥𝐚𝐭𝐟𝐨𝐫𝐦 🔥";
-            let sizePart = selectedSize === 'SMALL' ? "𝐁𝐄𝐓 𝐒𝐌𝐀𝐋𝐋" : "𝐁𝐄𝐓 𝐁𝐈𝐆";
+            let topTitle = selectedSize === 'SMALL' ? "🔥 𝗦𝗠𝗔𝗟𝗟 𝗦𝗜𝗚𝗡𝗔𝗟 🔥" : "🔥 𝗕𝗜𝗚 𝗦𝗜𝗚𝗡𝗔𝗟 🔥";
+            let actionText = selectedSize === 'SMALL' ? "𝐁𝐄𝐓 𝐒𝐌𝗔𝐋𝐋" : "𝐁𝐄𝐓 𝐁𝐈𝐆";
             
             let extraParts = [];
             if (selectedColor === 'GREEN') {
-                extraParts.push("GREEN 🟢");
+                extraParts.push("🟢");
             } else if (selectedColor === 'RED') {
-                extraParts.push("RED 🔴");
+                extraParts.push("🔴");
             }
 
-            if (selectedNum !== 'NONE') {
-                extraParts.push(`(${selectedNum})`);
-            }
-
-            let finalAction = sizePart;
+            let finalAction = actionText;
             if (extraParts.length > 0) {
-                finalAction += ` + ${extraParts.join(' ')}`;
+                finalAction += ` ${extraParts.join(' ')}`;
             }
 
-            // স্ক্রিনে শুধু প্লেন টেক্সট দেখানোর জন্য
-            let previewText = `${headerTitle}\n` +
+            // স্ক্রিনের প্রিভিউ টেক্সট
+            let previewText = `${topTitle}\n` +
                               `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
                               `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${currentPeriodNum}\n` +
                               `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
@@ -320,11 +316,11 @@
 
             document.getElementById('signalBox').innerText = previewText;
 
-            // টেলিগ্রাম চ্যানেলে পেস্ট করার সময় লিঙ্ক হাইড রেখে হাইপারলিংক পাঠানোর জন্য
+            // প্লেন ক্লিপবোর্ড কন্টেন্ট
             plainClipboardContent = previewText;
             
-            // HTML ফরম্যাট যা টেলিগ্রাম রিচ টেক্সট হিসেবে লুকাতে সাহায্য করবে
-            htmlClipboardContent = `${headerTitle}\n` +
+            // টেলিগ্রামের জন্য হাইপারলিংক ফরম্যাট (লিংক হাইড করা থাকবে)
+            htmlClipboardContent = `${topTitle}\n` +
                                    `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
                                    `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${currentPeriodNum}\n` +
                                    `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
@@ -341,13 +337,16 @@
 
             const totalDaySeconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
             const totalPeriods30s = Math.floor(totalDaySeconds / 30);
-            const sequenceNumber = 100000 + totalPeriods30s + 1;
+            
+            // হুবহু উইনগো গেমের পিরিয়ড ফরম্যাট (যেমন: 50728 বা পূর্ণাঙ্গ সিকোয়েন্স)
+            const sequenceNumber = totalPeriods30s + 1;
+            const shortPeriod = String(sequenceNumber).slice(-5); // শেষ ৫-৬ ডিজিট
             
             const newPeriod = `${year}${month}${day}${sequenceNumber}`;
             const remainingSecs = 30 - (totalDaySeconds % 30);
 
             document.getElementById('timerDisplay').innerText = `⏳ ${remainingSecs}s`;
-            document.getElementById('livePeriodLabel').innerText = `PERIOD: ${newPeriod.slice(-5)}`;
+            document.getElementById('livePeriodLabel').innerText = `PERIOD: ${shortPeriod}`;
 
             if (newPeriod !== currentPeriodNum) {
                 currentPeriodNum = newPeriod;
@@ -356,7 +355,6 @@
         }
 
         function copySignalText() {
-            // ক্লিপবোর্ডে হাইপারলিংকসহ কপি করার আধুনিক পদ্ধতি
             if (navigator.clipboard && window.ClipboardItem) {
                 const textBlob = new Blob([plainClipboardContent], { type: 'text/plain' });
                 const htmlBlob = new Blob([htmlClipboardContent], { type: 'text/html' });
