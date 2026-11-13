@@ -214,7 +214,7 @@
     <div class="panel-box">
         <div class="panel-header">
             <h2>👑 𝗢𝗪𝗡𝗘𝗥 𝗢𝗙 𝗝𝗢𝗬【𝟐𝐱™️】</h2>
-            <p>Manual Signal Panel (30S)</p>
+            <p>Manual Independent Signal Panel (30S)</p>
         </div>
 
         <div class="status-bar">
@@ -256,15 +256,16 @@
             📋 COPY SIGNAL FOR CHANNEL
         </button>
 
-        <div class="toast" id="toastMsg">✅ সফলভাবে কপি হয়েছে!</div>
+        <div class="toast" id="toastMsg">✅ লিংক হাইডসহ কপি হয়েছে! চ্যানেলে পেস্ট করুন।</div>
     </div>
 
     <script>
         let selectedSize = 'SMALL';
         let selectedColor = 'NONE';
         let selectedNum = 'NONE';
-        let currentPeriodNum = '';
-        let fullSignalText = '';
+        let shortPeriodNum = '';
+        let plainClipboardContent = '';
+        let htmlClipboardContent = '';
 
         function selectSize(size) {
             selectedSize = size;
@@ -298,59 +299,87 @@
             } else if (selectedColor === 'RED') {
                 extraParts.push("🔴");
             }
+            if (selectedNum !== 'NONE') {
+                extraParts.push(`(${selectedNum})`);
+            }
 
             let finalAction = actionText;
             if (extraParts.length > 0) {
                 finalAction += ` ${extraParts.join(' ')}`;
             }
 
-            fullSignalText = `${topTitle}\n` +
-                             `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
-                             `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${currentPeriodNum}\n` +
-                             `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
-                             `⚡ 𝐖𝐈𝐍𝐆𝐎   ➤   𝟯𝟬𝗦 ⏱️\n` +
-                             `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
-                             `🔗 𝗗𝗜𝗥𝗘𝗖𝗧 𝗪𝗘𝗕 𝗘𝗡𝗧𝗥𝗬\n` +
-                             `https://hgnice.bet/#/register?invitationCode=68758106622`;
+            // স্ক্রিনের প্রিভিউ টেক্সট (পিরিয়ড নাম্বার শুধু শেষ ৫ ডিজিট দেখাবে)
+            let previewText = `${topTitle}\n` +
+                              `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                              `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${shortPeriodNum}\n` +
+                              `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
+                              `⚡ 𝐖𝐈𝐍𝐆𝐎   ➤   𝟯𝟬𝗦 ⏱️\n` +
+                              `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                              `🔗 𝗗𝗜𝗥𝗘𝗖𝗧 𝗪𝗘𝗕 𝗘𝗡𝗧𝗥𝗬`;
 
-            document.getElementById('signalBoxinnerText') = fullSignalText;
-            document.getElementById('signalBox').innerText = fullSignalText;
+            document.getElementById('signalBox').innerText = previewText;
+
+            // প্লেন টেক্সট কপি কন্টেন্ট
+            plainClipboardContent = previewText;
+
+            // টেলিগ্রামের জন্য হাইপারলিংক ফরম্যাট (লিংক হাইড করা থাকবে)
+            htmlClipboardContent = `${topTitle}\n` +
+                                   `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                                   `💎 𝐏𝐄𝐑𝐈𝐎𝐃   ➤   📅 ${shortPeriodNum}\n` +
+                                   `🎯 𝐀𝐂𝐓𝐈𝐎𝐍   ➤   ${finalAction}\n` +
+                                   `⚡ 𝐖𝐈𝐍𝐆𝐎   ➤   𝟯𝟬𝗦 ⏱️\n` +
+                                   `▱▱▱▱▱▱▱▱▱▱▱▱▱▱\n` +
+                                   `<a href="https://hgnice.bet/#/register?invitationCode=68758106622">🔗 𝗗𝗜𝗥𝗘𝗖𝗧 𝗪𝗘𝗕 𝗘𝗡𝗧𝗥𝗬</a>`;
         }
 
         function updateTimerAndPeriod() {
             const now = new Date();
-            const year = now.getUTCFullYear();
-            const month = String(now.getUTCMonth() + 1).padStart(2, '0');
-            const day = String(now.getUTCDate()).padStart(2, '0');
-
             const totalDaySeconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
             const totalPeriods30s = Math.floor(totalDaySeconds / 30);
             
             const sequenceNumber = totalPeriods30s + 1;
-            const shortPeriod = String(sequenceNumber).slice(-5);
+            // উইনগো গেমের মতো শেষ ৫ ডিজিট পিরিয়ড নাম্বার বের করা (যেমন: 50728)
+            const exactShortPeriod = String(50000 + (sequenceNumber % 50000)); 
             
-            const newPeriod = `${year}${month}${day}${sequenceNumber}`;
             const remainingSecs = 30 - (totalDaySeconds % 30);
 
             document.getElementById('timerDisplay').innerText = `⏳ ${remainingSecs}s`;
-            document.getElementById('livePeriodLabel').innerText = `PERIOD: ${shortPeriod}`;
+            document.getElementById('livePeriodLabel').innerText = `PERIOD: ${exactShortPeriod}`;
 
-            if (newPeriod !== currentPeriodNum) {
-                currentPeriodNum = newPeriod;
+            if (exactShortPeriod !== shortPeriodNum) {
+                shortPeriodNum = exactShortPeriod;
                 buildSignalText();
             }
         }
 
         function copySignalText() {
-            navigator.clipboard.writeText(fullSignalText).then(() => {
-                const toast = document.getElementById('toastMsg');
-                toast.style.display = 'block';
-                setTimeout(() => {
-                    toast.style.display = 'none';
-                }, 1800);
-            }).catch(err => {
-                alert("ਕপি করতে সমস্যা হয়েছে!");
+            if (navigator.clipboard && window.ClipboardItem) {
+                const textBlob = new Blob([plainClipboardContent], { type: 'text/plain' });
+                const htmlBlob = new Blob([htmlClipboardContent], { type: 'text/html' });
+                const clipboardItem = new ClipboardItem({ 'text/plain': textBlob, 'text/html': htmlBlob });
+                
+                navigator.clipboard.write([clipboardItem]).then(() => {
+                    showToast();
+                }).catch(() => {
+                    fallbackCopy();
+                });
+            } else {
+                fallbackCopy();
+            }
+        }
+
+        function fallbackCopy() {
+            navigator.clipboard.writeText(plainClipboardContent).then(() => {
+                showToast();
             });
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toastMsg');
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 1800);
         }
 
         setInterval(updateTimerAndPeriod, 1000);
