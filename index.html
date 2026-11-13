@@ -91,26 +91,24 @@
             font-weight: 900;
             font-size: 0.95rem;
             cursor: pointer;
-            border: 2px solid transparent;
+            border: 2px solid #333;
+            background: #121212;
+            color: #cbd5e1;
             transition: 0.15s;
         }
 
-        .btn-big {
+        .action-btn.btn-big.active {
             background: linear-gradient(135deg, #991b1b, #ef4444);
             color: #fff;
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
         }
 
-        .btn-small {
+        .action-btn.btn-small.active {
             background: linear-gradient(135deg, #065f46, #10b981);
             color: #fff;
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
-        }
-
-        .action-btn.active {
             border-color: #ffd700;
-            transform: scale(1.03);
-            box-shadow: 0 0 18px rgba(255, 215, 0, 0.8);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
         }
 
         /* অপশনাল কালার বাটন */
@@ -122,7 +120,7 @@
         }
 
         .opt-btn {
-            padding: 8px 4px;
+            padding: 9px 4px;
             border-radius: 10px;
             background: #121212;
             border: 1.5px solid #333;
@@ -135,8 +133,9 @@
 
         .opt-btn.active {
             border-color: #ffd700;
-            background: rgba(255, 215, 0, 0.2);
+            background: rgba(255, 215, 0, 0.25);
             color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
         /* অপশনাল নাম্বার বাটন (0-9) */
@@ -221,7 +220,7 @@
     <div class="panel-box">
         <div class="panel-header">
             <h2>👑 𝗢𝗪𝗡𝗘𝗥 𝗢𝗙 𝗝𝗢𝗬【𝟐𝐱™️】</h2>
-            <p>Manual Analysis Signal Generator (30S)</p>
+            <p>Manual Independent Signal Panel (30S)</p>
         </div>
 
         <!-- লাইভ পিরিয়ড ও টাইমার -->
@@ -230,14 +229,14 @@
             <span id="timerDisplay">⏳ 30s</span>
         </div>
 
-        <!-- ১. মেইন সিগন্যাল (BIG / SMALL) -->
-        <div class="section-label">🎯 সিগন্যাল সিলেক্ট করুন (BIG / SMALL):</div>
+        <!-- ১. মেইন সিগন্যাল (BIG / SMALL স্বাধীন) -->
+        <div class="section-label">🎯 সিগন্যাল (BIG / SMALL):</div>
         <div class="main-btn-grid">
-            <button class="action-btn btn-small active" id="btnSmall" onclick="selectSize('SMALL')">SMALL 🟢 GREEN</button>
-            <button class="action-btn btn-big" id="btnBig" onclick="selectSize('BIG')">BIG 🔴 RED</button>
+            <button class="action-btn btn-small active" id="btnSmall" onclick="selectSize('SMALL')">SMALL</button>
+            <button class="action-btn btn-big" id="btnBig" onclick="selectSize('BIG')">BIG</button>
         </div>
 
-        <!-- ২. অপশনাল কালার -->
+        <!-- ২. অপশনাল কালার (স্বাধীনভাবে সিলেক্ট করা যাবে) -->
         <div class="section-label">🎨 কালার (Optional):</div>
         <div class="opt-color-grid">
             <button class="opt-btn active" id="colNone" onclick="selectColor('NONE')">NONE (বাদ)</button>
@@ -245,7 +244,7 @@
             <button class="opt-btn" id="colRed" onclick="selectColor('RED 🔴')">RED 🔴</button>
         </div>
 
-        <!-- ৩. অপশনাল নাম্বার -->
+        <!-- ৩. অপশনাল নাম্বার (0-9) -->
         <div class="section-label">🔢 নাম্বার (Optional):</div>
         <div class="num-grid" id="numGrid">
             <button class="num-btn active" onclick="selectNum('NONE', this)">OFF</button>
@@ -313,10 +312,9 @@
 
         function buildSignalText() {
             let titleEmoji = selectedSize === 'SMALL' ? "🔥 𝗦𝗠𝗔𝗟𝗟 𝗦𝗜𝗚𝗡𝗔𝗟 🔥" : "🔥 𝗕𝗜𝗚 𝗦𝗜𝗚𝗡𝗔𝗟 🔥";
+            let sizePart = selectedSize === 'SMALL' ? "𝐁𝐄𝐓 𝐒𝐌𝐀𝐋𝐋" : "𝐁𝐄𝐓 𝐁𝐈𝐆";
             
-            // কালার নামসহ টেক্সট ফিক্সড করা
-            let sizePart = selectedSize === 'SMALL' ? "𝐁𝐄𝐓 𝐒𝐌𝐀𝐋𝐋 🟢 GREEN" : "𝐁𝐄𝐓 𝐁𝐈𝐆 🔴 RED";
-            
+            // কালার ও নাম্বার স্বাধীনভাবে যুক্ত করা
             let extraParts = [];
             if (selectedColor !== 'NONE') {
                 extraParts.push(toBoldUnicode(selectedColor));
